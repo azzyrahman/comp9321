@@ -1,0 +1,420 @@
+{
+    "swagger": "2.0",
+    "basePath": "/api",
+    "paths": {
+        "/data/areas": {
+            "get": {
+                "responses": {
+                    "401": {
+                        "description": "Missing or invalid API key."
+                    },
+                    "400": {
+                        "description": "Invalid request parameters."
+                    },
+                    "200": {
+                        "description": "Success."
+                    }
+                },
+                "description": "An endpoint to return a list of area names",
+                "operationId": "get_area_list_api",
+                "parameters": [
+                    {
+                        "name": "area_type",
+                        "in": "query",
+                        "type": "string",
+                        "required": true,
+                        "enum": [
+                            "suburb",
+                            "postcode",
+                            "council"
+                        ],
+                        "collectionFormat": "multi",
+                        "description": "The area type"
+                    }
+                ],
+                "tags": [
+                    "data"
+                ]
+            }
+        },
+        "/data/explore": {
+            "get": {
+                "responses": {
+                    "401": {
+                        "description": "Missing or invalid API key."
+                    },
+                    "400": {
+                        "description": "Invalid request parameters."
+                    },
+                    "200": {
+                        "description": "Success.",
+                        "schema": {
+                            "$ref": "#/definitions/ExploreResponse"
+                        }
+                    }
+                },
+                "description": "An endpoint for exploring real estate data",
+                "operationId": "get_explore_api",
+                "parameters": [
+                    {
+                        "name": "data_type",
+                        "in": "query",
+                        "type": "string",
+                        "required": true,
+                        "enum": [
+                            "num_sold",
+                            "median_price"
+                        ],
+                        "collectionFormat": "multi",
+                        "description": "The type of statistic to return"
+                    },
+                    {
+                        "name": "years",
+                        "in": "query",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "collectionFormat": "multi",
+                        "description": "The years which to return data for"
+                    },
+                    {
+                        "name": "area_grouping",
+                        "in": "query",
+                        "type": "string",
+                        "enum": [
+                            "suburb",
+                            "postcode",
+                            "council"
+                        ],
+                        "collectionFormat": "multi",
+                        "description": "The area type on which to group the values by(eg. suburb, postcode, council)"
+                    },
+                    {
+                        "name": "group_by",
+                        "in": "query",
+                        "type": "string",
+                        "enum": [
+                            "property_type",
+                            "num_bedrooms",
+                            "num_baths",
+                            "num_carspaces",
+                            "distance_to_cbd_bucket",
+                            "land_size_bucket",
+                            "building_area_bucket"
+                        ],
+                        "collectionFormat": "multi",
+                        "description": "The field on which to group the values by(eg. num_bedrooms, num_baths, etc.)"
+                    }
+                ],
+                "tags": [
+                    "data"
+                ]
+            }
+        },
+        "/data/model": {
+            "get": {
+                "responses": {
+                    "401": {
+                        "description": "Missing or invalid API key."
+                    },
+                    "400": {
+                        "description": "Invalid request parameters."
+                    },
+                    "200": {
+                        "description": "Success.",
+                        "schema": {
+                            "$ref": "#/definitions/ModelResponse"
+                        }
+                    }
+                },
+                "description": "An endpoint for running model to determine house prices",
+                "operationId": "get_model_api",
+                "parameters": [
+                    {
+                        "name": "area",
+                        "in": "query",
+                        "type": "string",
+                        "required": true,
+                        "description": "The suburb where the property is located(eg. Melbourne)"
+                    },
+                    {
+                        "name": "property_type",
+                        "in": "query",
+                        "type": "string",
+                        "required": true,
+                        "enum": [
+                            "house",
+                            "townhouse",
+                            "unit"
+                        ],
+                        "collectionFormat": "multi",
+                        "description": "The type of property(eg. house, townhouse, unit, etc.)"
+                    },
+                    {
+                        "name": "num_bedrooms",
+                        "in": "query",
+                        "type": "integer",
+                        "required": true,
+                        "description": "The number of bedrooms."
+                    },
+                    {
+                        "name": "num_baths",
+                        "in": "query",
+                        "type": "integer",
+                        "required": true,
+                        "description": "The number of bathrooms."
+                    },
+                    {
+                        "name": "num_carspaces",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "The number of car spaces."
+                    },
+                    {
+                        "name": "land_size",
+                        "in": "query",
+                        "type": "number",
+                        "description": "The size of the land where the property is located"
+                    },
+                    {
+                        "name": "distance_to_cbd",
+                        "in": "query",
+                        "type": "number",
+                        "description": "The distance of the property to the CBD"
+                    },
+                    {
+                        "name": "building_area",
+                        "in": "query",
+                        "type": "number",
+                        "description": "The size of the property"
+                    },
+                    {
+                        "name": "year_built",
+                        "in": "query",
+                        "type": "number",
+                        "description": "The year when the property was built"
+                    }
+                ],
+                "tags": [
+                    "data"
+                ]
+            }
+        },
+        "/data/sales-listings": {
+            "get": {
+                "responses": {
+                    "401": {
+                        "description": "Missing or invalid API key."
+                    },
+                    "200": {
+                        "description": "Success.",
+                        "schema": {
+                            "$ref": "#/definitions/SalesListing"
+                        }
+                    }
+                },
+                "description": "An endpoint for retrieving sales listing information",
+                "operationId": "get_sales_listing_api",
+                "parameters": [
+                    {
+                        "name": "area",
+                        "in": "query",
+                        "type": "string",
+                        "description": "The suburb where the property is located(eg. Melbourne)"
+                    },
+                    {
+                        "name": "property_type",
+                        "in": "query",
+                        "type": "string",
+                        "enum": [
+                            "house",
+                            "townhouse",
+                            "unit"
+                        ],
+                        "collectionFormat": "multi",
+                        "description": "The type of property(eg. house, townhouse, unit, etc.)"
+                    },
+                    {
+                        "name": "num_bedrooms",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "The number of bedrooms."
+                    },
+                    {
+                        "name": "num_baths",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "The number of bathrooms."
+                    },
+                    {
+                        "name": "num_carspaces",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "The number of car spaces."
+                    }
+                ],
+                "tags": [
+                    "data"
+                ]
+            }
+        }
+    },
+    "info": {
+        "title": "API",
+        "version": "1.0"
+    },
+    "produces": [
+        "application/json"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "securityDefinitions": {
+        "bearer_token": {
+            "type": "apiKey",
+            "in": "header",
+            "name": "Authorization",
+            "description": "Type in the *'Value'* input box below: **'Bearer &lt;token&gt;'**."
+        }
+    },
+    "security": [
+        {
+            "bearer_token": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "data",
+            "description": "Data and model-related API endpoints"
+        }
+    ],
+    "definitions": {
+        "ModelResponse": {
+            "properties": {
+                "predicted_price": {
+                    "type": "number",
+                    "description": "The predicted price of the property",
+                    "example": 654321.5
+                }
+            },
+            "type": "object"
+        },
+        "SalesListing": {
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "description": "The address of the property",
+                    "example": "1 Dudley Street"
+                },
+                "num_bedrooms": {
+                    "type": "integer",
+                    "description": "The number of bedrooms",
+                    "example": 2
+                },
+                "num_baths": {
+                    "type": "integer",
+                    "description": "The number of bathrooms",
+                    "example": 2
+                },
+                "num_carspaces": {
+                    "type": "integer",
+                    "description": "The number of car spaces",
+                    "example": 2
+                },
+                "price": {
+                    "type": "number",
+                    "description": "The price which the property sold for",
+                    "example": 654321.5
+                },
+                "property_type": {
+                    "type": "string",
+                    "description": "The type of property(eg. house, townhouse, unit, etc.)",
+                    "example": "house"
+                },
+                "land_size": {
+                    "type": "number",
+                    "description": "The size of the land",
+                    "example": 300
+                },
+                "building_area": {
+                    "type": "number",
+                    "description": "The total floor area of the property",
+                    "example": 220
+                },
+                "latitude": {
+                    "type": "number",
+                    "description": "The latitude of the property",
+                    "example": -37.8136
+                },
+                "longitude": {
+                    "type": "number",
+                    "example": 144.9631
+                },
+                "distance_to_cbd": {
+                    "type": "number",
+                    "description": "The distance of the property to the CBD(in km)",
+                    "example": 2.5
+                },
+                "year_build": {
+                    "type": "integer",
+                    "description": "The year when the property was built",
+                    "example": 2000
+                },
+                "date_sold": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "The date when the property was sold",
+                    "example": "2017-01-01"
+                },
+                "postcode": {
+                    "type": "string",
+                    "description": "The postcode where the property is located",
+                    "example": "3000"
+                },
+                "suburb": {
+                    "type": "string",
+                    "description": "The suburb where the property is located",
+                    "example": "Melbourne"
+                },
+                "council": {
+                    "type": "string",
+                    "description": "The council where the property is located",
+                    "example": "Melbourne City Council"
+                }
+            },
+            "type": "object"
+        },
+        "ExploreResponse": {
+            "properties": {
+                "keys": {
+                    "type": "array",
+                    "description": "The list of header values",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "data": {
+                    "type": "array",
+                    "description": "The list of values",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "geojson_url": {
+                    "type": "string",
+                    "description": "The url of the geojson file for the chosen area grouping"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "responses": {
+        "ParseError": {
+            "description": "When a mask can't be parsed"
+        },
+        "MaskError": {
+            "description": "When any error occurs on mask"
+        }
+    }
+}
